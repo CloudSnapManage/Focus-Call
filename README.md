@@ -109,7 +109,7 @@ Connection established + UI switches to call screen
 
 1. **Clone/Create Repository**
    ```bash
-   git clone https://github.com/your-username/focus-sync.git
+   git clone https://github.com/your-username/focus-sync.git](https://github.com/CloudSnapManage/Focus-Call.git
    cd focus-sync
    ```
 
@@ -179,7 +179,7 @@ npm run deploy
 3. Select `gh-pages` branch as source
 4. Save
 
-Your app will be live at: `https://username.github.io/focus-sync`
+Your app will be live at: `https://username.github.io/Focus-Call.git`
 
 ## 💡 Usage Guide
 
