@@ -52,8 +52,8 @@
 
     <!-- Main Call Screen -->
     <div id="callScreen" class="screen">
-      <div class="mobile-call-tabs hidden">
-        <button type="button" class="tab-btn active" data-tab="video">Video</button>
+      <div class="mobile-call-tabs">
+        <button type="button" class="tab-btn active" data-tab="video">Call</button>
         <button type="button" class="tab-btn" data-tab="timer">Timer</button>
         <button type="button" class="tab-btn" data-tab="goals">Goals</button>
       </div>
@@ -75,6 +75,15 @@
               <div class="video-label">Focus Partner</div>
               <div id="noRemoteStream" class="no-stream-placeholder">Waiting for connection...</div>
             </div>
+          </div>
+
+          <div class="call-timer-overlay">
+            <div class="overlay-timer-display">
+              <div id="overlayTimerMinutes" class="overlay-timer-value">25</div>
+              <div class="overlay-timer-separator">:</div>
+              <div id="overlayTimerSeconds" class="overlay-timer-value">00</div>
+            </div>
+            <div id="overlaySessionMode" class="overlay-session-mode">Focus Time</div>
           </div>
 
           <!-- Video Controls -->

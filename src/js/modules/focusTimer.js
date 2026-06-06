@@ -217,15 +217,26 @@ export class FocusTimer {
     const minutesEl = document.getElementById('timerMinutes');
     const secondsEl = document.getElementById('timerSeconds');
     const modeEl = document.getElementById('sessionMode');
+    const overlayMinutesEl = document.getElementById('overlayTimerMinutes');
+    const overlaySecondsEl = document.getElementById('overlayTimerSeconds');
+    const overlayModeEl = document.getElementById('overlaySessionMode');
     const timerDisplay = document.querySelector('.timer-display');
 
     if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
     if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+    if (overlayMinutesEl) overlayMinutesEl.textContent = String(minutes).padStart(2, '0');
+    if (overlaySecondsEl) overlaySecondsEl.textContent = String(seconds).padStart(2, '0');
 
     if (modeEl) {
       modeEl.textContent = this.isBreakTime ? 'Break Time' : 'Focus Time';
       modeEl.classList.toggle('break', this.isBreakTime);
       modeEl.classList.toggle('focus', !this.isBreakTime);
+    }
+
+    if (overlayModeEl) {
+      overlayModeEl.textContent = this.isBreakTime ? 'Break Time' : 'Focus Time';
+      overlayModeEl.classList.toggle('break', this.isBreakTime);
+      overlayModeEl.classList.toggle('focus', !this.isBreakTime);
     }
 
     if (timerDisplay) {
