@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "P2P Video Call & Shared Focus Session Timer - GitHub Pages Hosted",
   "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
