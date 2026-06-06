@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus Sync - P2P Video & Shared Timer</title>
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./styles/video.css">
+  <link rel="stylesheet" href="./styles/timer.css">
+  <link rel="stylesheet" href="./styles/checklist.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Welcome/Connection Screen -->
+    <div id="welcomeScreen" class="screen active">
+      <div class="welcome-container">
+        <h1>Focus Sync</h1>
+        <p class="subtitle">Peer-to-Peer Video Call & Shared Focus Timer</p>
+        
+        <div class="connection-panel">
+          <div class="panel-section">
+            <h2>Create New Session</h2>
+            <button id="createRoomBtn" class="btn btn-primary">Generate Room ID</button>
+            <div id="createdRoomInfo" class="room-info hidden">
+              <p>Your Room ID:</p>
+              <div class="room-id-display">
+                <code id="roomIdDisplay"></code>
+                <button id="copyRoomBtn" class="btn btn-small">Copy Link</button>
+              </div>
+              <p class="hint">Share this link or ID with your focus partner</p>
+            </div>
+          </div>
+
+          <div class="divider">OR</div>
+
+          <div class="panel-section">
+            <h2>Join Existing Session</h2>
+            <input 
+              type="text" 
+              id="roomIdInput" 
+              placeholder="Enter Room ID or paste full link"
+              class="input"
+            >
+            <button id="joinRoomBtn" class="btn btn-primary">Join Room</button>
+          </div>
+        </div>
+
+        <div id="connectionError" class="error-message hidden"></div>
+        <div id="connectionStatus" class="status-message"></div>
+      </div>
+    </div>
+
+    <!-- Main Call Screen -->
+    <div id="callScreen" class="screen">
+      <div class="mobile-call-tabs hidden">
+        <button type="button" class="tab-btn active" data-tab="video">Video</button>
+        <button type="button" class="tab-btn" data-tab="timer">Timer</button>
+        <button type="button" class="tab-btn" data-tab="goals">Goals</button>
+      </div>
+      <div class="call-layout">
+        <div id="callRoomInfo" class="call-room-info hidden">
+          <span>Room ID:</span>
+          <code id="callRoomIdDisplay"></code>
+        </div>
+        <!-- Video Section -->
+        <div class="video-section active" data-tab-content="video">
+          <div class="video-container">
+            <div id="localVideoContainer" class="video-box local">
+              <video id="localVideo" playsinline muted autoplay></video>
+              <div class="video-label">You</div>
+            </div>
+            
+            <div id="remoteVideoContainer" class="video-box remote">
+              <video id="remoteVideo" playsinline autoplay></video>
+              <div class="video-label">Focus Partner</div>
+              <div id="noRemoteStream" class="no-stream-placeholder">Waiting for connection...</div>
+            </div>
+          </div>
+
+          <!-- Video Controls -->
+          <div class="video-controls">
+            <button id="toggleAudioBtn" class="control-btn" title="Toggle Microphone">
+              <span class="icon">🎤</span>
+              <span class="label">Mic</span>
+            </button>
+            <button id="toggleVideoBtn" class="control-btn" title="Toggle Camera">
+              <span class="icon">📹</span>
+              <span class="label">Camera</span>
+            </button>
+            <button id="toggleScreenBtn" class="control-btn" title="Share Screen">
+              <span class="icon">🖥️</span>
+              <span class="label">Share</span>
+            </button>
+            <button id="fullscreenBtn" class="control-btn" title="View Remote Video Fullscreen">
+              <span class="icon">⛶</span>
+              <span class="label">Fullscreen</span>
+            </button>
+            <button id="hangupBtn" class="control-btn hang-up" title="End Call">
+              <span class="icon">📞</span>
+              <span class="label">Hang Up</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Focus Session Section -->
+        <div class="focus-section" data-tab-content="timer">
+          <!-- Timer Display -->
+          <div id="timerContainer" class="timer-container">
+            <div class="timer-display">
+              <div id="timerMinutes" class="timer-value">25</div>
+              <div class="timer-separator">:</div>
+              <div id="timerSeconds" class="timer-value">00</div>
+            </div>
+            <div id="sessionMode" class="session-mode">Focus Time</div>
+          </div>
+
+          <!-- Timer Controls -->
+          <div class="timer-controls">
+            <button id="startTimerBtn" class="btn btn-timer btn-active">Start</button>
+            <button id="pauseTimerBtn" class="btn btn-timer">Pause</button>
+            <button id="resetTimerBtn" class="btn btn-timer">Reset</button>
+          </div>
+
+          <!-- Timer Settings -->
+          <div class="timer-settings">
+            <label for="focusTimeInput">Focus Duration (min):</label>
+            <input 
+              type="number" 
+              id="focusTimeInput" 
+              value="25" 
+              min="1" 
+              max="60"
+              class="input-small"
+            >
+            <label for="breakTimeInput">Break Duration (min):</label>
+            <input 
+              type="number" 
+              id="breakTimeInput" 
+              value="5" 
+              min="1" 
+              max="30"
+              class="input-small"
+            >
+          </div>
+
+          <!-- Synced Status Indicator -->
+          <div class="sync-indicator">
+            <span id="syncStatus" class="sync-dot"></span>
+            <span id="syncText">Synced</span>
+          </div>
+        </div>
+
+        <!-- Task Checklist Section -->
+        <div class="checklist-section" data-tab-content="goals">
+          <h3>Session Goals</h3>
+          <div class="checklist-input">
+            <input 
+              type="text" 
+              id="taskInput" 
+              placeholder="Add a focus goal..."
+              class="input"
+            >
+            <button id="addTaskBtn" class="btn btn-small">+</button>
+          </div>
+
+          <div class="goal-share-control">
+            <label class="share-goals-label">
+              <input type="checkbox" id="shareGoalsToggle" />
+              Share my goals with partner
+            </label>
+          </div>
+          
+          <ul id="taskList" class="task-list">
+            <!-- Tasks will be rendered here -->
+          </ul>
+
+          <div class="checklist-stats">
+            <small id="tasksProgress">0 of 0 completed</small>
+          </div>
+
+          <div class="partner-goals-section">
+            <div class="partner-goals-header">
+              <h3>Partner Goals</h3>
+              <span id="partnerGoalsStatus" class="partner-goals-status">Not shared</span>
+            </div>
+            <ul id="partnerTaskList" class="task-list partner">
+              <li class="partner-placeholder">Waiting for partner goals...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disconnect Notification -->
+      <div id="disconnectNotice" class="disconnect-notice hidden">
+        <p>Partner disconnected. Session paused.</p>
+        <button id="returnToWelcomeBtn" class="btn btn-small">Return to Welcome</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- External Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+  <!-- Application Scripts -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

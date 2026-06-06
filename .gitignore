@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+*.log
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.env.local
+.env.*.local
