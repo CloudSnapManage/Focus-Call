@@ -293,6 +293,7 @@ export class UIManager {
       li.appendChild(text);
       li.appendChild(deleteBtn);
       taskList.appendChild(li);
+      
     });
   }
 
